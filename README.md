@@ -2,7 +2,7 @@
 
 
 ## Running in dev mode with in memory database
-### Using Maven (Java version 11 is needed)
+### Using Maven (Java version 17 is needed)
 
 ```
 //just clone this repo and
