@@ -1,0 +1,30 @@
+FROM eclipse-temurin:17 as builder
+RUN $JAVA_HOME/bin/jlink \
+         --add-modules java.se,jdk.unsupported,jdk.crypto.ec \
+         --strip-debug \
+         --no-man-pages \
+         --no-header-files \
+         --compress=2 \
+         --output /javaruntime
+COPY pom.xml pom.xml
+COPY .mvn .mvn
+COPY ./mvnw ./mvnw
+COPY pom.xml pom.xml
+RUN ./mvnw dependency:go-offline
+COPY . .
+RUN ./mvnw package -Dmaven.test.skip=true
+RUN cp target/*.jar app.jar
+RUN java -Djarmode=layertools -jar app.jar extract
+
+FROM debian:buster-slim
+RUN apt-get update -y
+RUN apt-get install -y ffmpeg
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH "${JAVA_HOME}/bin:${PATH}"
+COPY --from=builder /javaruntime $JAVA_HOME
+WORKDIR application
+COPY --from=builder dependencies/ ./
+COPY --from=builder spring-boot-loader/ ./
+COPY --from=builder snapshot-dependencies/ ./
+COPY --from=builder application/ ./
+CMD ["java", "org.springframework.boot.loader.JarLauncher"]
