@@ -58,14 +58,14 @@ ALTER TABLE isikato_employee ADD image_id NUMBER(19,0) REFERENCES isikato_file(i
 
 CREATE TABLE isikato_data(
                              id NUMBER(19,0) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-                             data BLOB,
+                             path_to_data VARCHAR (1000),
                              type INTEGER,
                              file_id NUMBER(19,0) references isikato_file(id),
                              deleted number(1,0) DEFAULT 0
 );
 
 CREATE TABLE isikato_category(
-                                 id NUMBER(19,0) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                                 id NUMBER(19) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                                  name VARCHAR (255) ,
                                  type VARCHAR(255) ,
                                  description VARCHAR(1024) ,
@@ -118,7 +118,7 @@ CREATE TABLE isikato_content_image(
 );
 
 CREATE TABLE isikato_banner(
-                               id NUMBER(19,0) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+                               id NUMBER(19,0) GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
                                title VARCHAR (255) ,
                                page VARCHAR(255) ,
                                image_id NUMBER(19,0) references isikato_file(id),
@@ -128,7 +128,7 @@ CREATE TABLE isikato_banner(
 );
 
 CREATE TABLE isikato_content_image2(
-                                       content_id NUMBER(19,0) REFERENCES isikato_content(id),
-                                       image_id NUMBER(19,0) REFERENCES isikato_file(id)
+                               content_id NUMBER(19,0) REFERENCES isikato_content(id),
+                               image_id NUMBER(19,0) REFERENCES isikato_file(id)
 );
 

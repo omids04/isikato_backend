@@ -23,9 +23,8 @@ public class FileData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Lob
-    @Basic(fetch = FetchType.EAGER)
-    private byte[] data;
+
+    private String pathToData;
 
     @Builder.Default
     private boolean deleted = false;

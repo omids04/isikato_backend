@@ -1,5 +1,9 @@
 # isikato_backend
 
+## media files location
+```agsl
+/var/isikato/files/
+```
 
 ## Running in dev mode with in memory database
 ### Using Maven (Java version 17 is needed)

@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class FileController {
     }
 
     @GetMapping(value = {"{id}/{name}"})
-    public ResponseEntity<Resource> getFileData(@PathVariable("id") long id, @PathVariable(value = "name", required = false) String name){
+    public ResponseEntity<Resource> getFileData(@PathVariable("id") long id, @PathVariable(value = "name", required = false) String name) throws IOException {
         String sizeString = name.split("_")[0];
         FileData.Type type = FileData.Type.ORIGINAL;
         try {
@@ -49,7 +51,7 @@ public class FileController {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.parseMediaType(data.get().getFile().getMime()))
-                .body(new ByteArrayResource(data.get().getData()));
+                .body(new ByteArrayResource(Files.readAllBytes(Path.of(data.get().getPathToData()))));
     }
 
 }
